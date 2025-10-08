@@ -426,7 +426,7 @@ def assign_report_permissions(s, user, report_id, current_level):
             perm = ReportPermission(id=str(uuid.uuid4()), report_id=report_id, group_id=group_options[name], level=group_level)
             s.add(perm)
         s.commit()
-        st.success("Permissions saved successfully! <i class='fa-solid fa-lock'></i>", unsafe_allow_html=True)
+        st.success("Permissions saved successfully! 🔒")
 
     st.markdown("### <i class='fa-solid fa-user-shield'></i> Current Permissions", unsafe_allow_html=True)
     perms = s.query(ReportPermission).filter_by(report_id=report_id).all()
