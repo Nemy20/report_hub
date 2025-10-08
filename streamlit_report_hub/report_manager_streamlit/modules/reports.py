@@ -204,8 +204,6 @@ def report_upload_page(s, user):
             s.commit()
             
             st.success(f"Report '{title}' uploaded successfully! 📄")
-            st.session_state.report_title = ""
-            st.session_state.report_file = None
             st.session_state.show_upload = False
             safe_rerun()
 
