@@ -103,25 +103,34 @@ def display_folders(s, user, search_term):
     if not org_id:
         st.error("Organization ID not found in user session.")
         return
+
     folders = s.query(Folder).filter_by(organization_id=org_id).all()
     filtered_folders = [f for f in folders if search_term.lower() in f.name.lower()] if search_term else folders
+
     folder_cols = st.columns(3)
     for i, f in enumerate(filtered_folders):
         count = s.query(Report).filter_by(folder_id=f.id).count()
         with folder_cols[i % 3]:
+            # Folder card content
             st.markdown(
-                f"""<div class="folder-card">
-                <i class="fa-solid fa-folder folder-icon"></i>
-                <div>
-                  <div class="card-title">{f.name}</div>
-                  <div class="card-meta">{count} reports</div>
+                f"""
+                <div class="folder-card">
+                    <i class="fa-solid fa-folder folder-icon"></i>
+                    <div>
+                        <div class="card-title">{f.name}</div>
+                        <div class="card-meta">{count} reports</div>
+                    </div>
                 </div>
-                <div class="action-btn">{st.button('Open', key=f"open_folder_{f.id}")}</div>
-                </div>
-                """, unsafe_allow_html=True)
-            if st.session_state.get(f"open_folder_{f.id}"):
+                """,
+                unsafe_allow_html=True
+            )
+
+            # ✅ Place button *outside* of the HTML string
+            if st.button("Open", key=f"open_folder_{f.id}"):
                 st.session_state.current_folder = f.id
                 st.session_state.show_new_folder = False
+                st.session_state.show_upload = False
+                from .utils import safe_rerun
                 safe_rerun()
 
 def new_folder_form(s, user):
