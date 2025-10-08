@@ -1,0 +1,12 @@
+pandas 
+numpy 
+matplotlib 
+streamlit 
+sqlalchemy 
+passlib 
+altair 
+plotly 
+openpyxl 
+python-dotenv 
+streamlit-sortables 
+alembic 
