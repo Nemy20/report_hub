@@ -7,7 +7,7 @@ import streamlit as st
 from .utils import safe_rerun
 import os
 import logging
-
+from email.utils import send_email
 
 st.markdown("""
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
@@ -152,6 +152,18 @@ def invite_user_flow():
                 # Pass the selected role to create_invite
                 token = create_invite(st.session_state.user["id"], email, org_id, role_select)
                 st.success(f"Invite created for {email} as {role_select}. Token: {token}")
+                token_url = f"https://reportsys.streamlit.app/?token={token}"
+                subject = f"You're invited to join {org_id} on Report Manager"
+                body = f"""
+                <p>Hello,</p>
+                <p>You’ve been invited to join <b>{org_id}</b> as <b>{role_select}</b>.</p>
+                <p>Use this invite token: <code>{token}</code> or click below to complete registration:</p>
+                <p><a href="{token_url}">Complete your registration</a></p>
+                <p>Best,<br>Report Manager System</p>
+                """
+
+                send_email(email, subject, body)
+                st.success(f"Invite sent to {email}")
                 st.info("Copy this token and send it to the invited user (or set up email sending).")
             except Exception as e:
                 st.error(str(e))
