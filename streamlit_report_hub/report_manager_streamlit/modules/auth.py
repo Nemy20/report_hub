@@ -339,9 +339,22 @@ def superadmin_org_management():
                             s.add(admin_user)
                         s.commit()
                         if create_admin_now and invite_token:
-                            st.success(f"<i class='fa-solid fa-building'></i> Organization '<b>{org_name}</b>' created and admin '<b>{admin_name}</b>' invited.<br>Invite token: <code>{invite_token}</code>", unsafe_allow_html=True)
+                            st.markdown(
+                                        f"<div style='background:#d1e7dd;padding:10px;border-radius:6px;'>"
+                                        f"<i class='fa-solid fa-building'></i> Organization '<b>{org_name}</b>' created and admin '<b>{admin_name}</b>' invited.<br>"
+                                        f"Invite token: <code>{invite_token}</code>"
+                                        f"</div>",
+                                        unsafe_allow_html=True
+                                    )
+
                         else:
-                            st.success(f"<i class='fa-solid fa-building'></i> Organization '<b>{org_name}'</b> created successfully.", unsafe_allow_html=True)
+                            st.markdown(
+                                    f"<div style='background:#d1e7dd;padding:10px;border-radius:6px;'>"
+                                    f"<i class='fa-solid fa-building'></i> Organization '<b>{org_name}</b>' created successfully."
+                                    f"</div>",
+                                    unsafe_allow_html=True
+                                )
+
                         safe_rerun()
                     except Exception as e:
                         s.rollback()
