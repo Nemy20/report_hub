@@ -281,9 +281,18 @@ def display_report_item(s, user, r):
     )
 
     with st.expander("Details"):
-        # View/Download section
+    # View/Download section
         if ext in ("csv", "xlsx"):
-            df = pd.read_csv(r.filepath) if ext == "csv" else pd.read_excel(io.BytesIO(open(r.filepath, 'rb').read()))
+            # ✅ Robust file reading with encoding fallback
+            if ext == "csv":
+                try:
+                    df = pd.read_csv(r.filepath, encoding="utf-8")
+                except UnicodeDecodeError:
+                    df = pd.read_csv(r.filepath, encoding="latin1")
+            else:
+                with open(r.filepath, "rb") as f:
+                    df = pd.read_excel(io.BytesIO(f.read()))
+
             if level in ['Editor', 'Owner']:
                 mode = st.selectbox("Mode", ["View", "Edit"], key=f"mode_{r.id}")
                 if mode == "View":
@@ -296,6 +305,7 @@ def display_report_item(s, user, r):
             else:
                 st.subheader("View")
                 st.dataframe(df, use_container_width=True)
+
         elif ext == "pdf":
             with open(r.filepath, "rb") as f:
                 pdf_bytes = f.read()
