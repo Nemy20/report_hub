@@ -135,22 +135,27 @@ def dashboards_main_page():
                 tag_str = f"<span style='background:#dcffe4;color:#178548;border-radius:5px;padding:3px 11px;font-size:.93em;margin-left:7px;'><i class='fa-solid fa-database'></i> Data Source</span>"
                 ext_tag = f"<span style='background:#e7f3ff;color:#255a93;border-radius:4px;font-size:.95em;padding:2px 7px;margin-left:5px;'>{ext.upper()}</span>"
 
+                # Draw the card layout first
                 st.markdown(f"""
                 <div class="datasource-card">
                     <i class="fa-solid {fa_icon} datasource-icon"></i>
                     <div style="flex:1;">
-                      <div style="font-weight:500;font-size:1.09em;">{r.title} {ext_tag} {tag_str}</div>
-                      <div style="color:#8c97a9;font-size:.96em;margin-top:3px;">
-                          <i class="fa-regular fa-user"></i> {uploader_name} &nbsp; 
-                          <i class="fa-regular fa-calendar"></i> {date_str} &nbsp; 
-                          <i class="fa-solid fa-database"></i> {size_str}
-                      </div>
+                    <div style="font-weight:500;font-size:1.09em;">{r.title} {ext_tag} {tag_str}</div>
+                    <div style="color:#8c97a9;font-size:.96em;margin-top:3px;">
+                        <i class="fa-regular fa-user"></i> {uploader_name} &nbsp; 
+                        <i class="fa-regular fa-calendar"></i> {date_str} &nbsp; 
+                        <i class="fa-solid fa-database"></i> {size_str}
                     </div>
-                    <div>
-                      {st.button("Create Dashboard", key=f"create_dashboard_{r.id}")}
                     </div>
                 </div>
                 """, unsafe_allow_html=True)
+
+                # Render the button separately (outside HTML)
+                if st.button("Create Dashboard", key=f"create_dashboard_{r.id}"):
+                    st.session_state["dashboard_create_form_id"] = r.id
+                    st.session_state["dashboard_create_default"] = f"Analytics from {r.title}"
+                    safe_rerun()
+
                 # Button logic: set form state and rerun
                 if st.session_state.get(f"create_dashboard_{r.id}"):
                     st.session_state["dashboard_create_form_id"] = r.id
