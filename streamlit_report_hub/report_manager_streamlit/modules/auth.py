@@ -7,7 +7,7 @@ import streamlit as st
 from .utils import safe_rerun
 import os
 import logging
-from email.utils import send_email
+from email_utils import send_email
 
 st.markdown("""
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
