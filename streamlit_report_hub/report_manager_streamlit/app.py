@@ -1,5 +1,5 @@
 # app.py
-import streamlit as st
+import streamlit as st 
 from db import init_db
 from models import User, Organization, Role, Group, Base
 from modules.auth import logout, invite_user_flow, users_and_invites_view, superadmin_org_management
@@ -13,7 +13,7 @@ from page.reset_password_page import reset_password
 from modules.organization import my_organization_page
 from page.dashboard_page import dashboards_main_page 
 from page.home_page import home_page 
-
+from page.register_page import create_superadmin_flow
 
 import os
 # Initialize DB and upload directory
@@ -37,6 +37,8 @@ def main_app():
     if "role" not in st.session_state:
         st.session_state.role = None
 
+    # ✅ NEW: show create superadmin form if no Superadmin exists
+    create_superadmin_flow()
     # --- Login / Registration / Forgot Password / Reset Password ---
     if not st.session_state.authenticated:
         st.title("Welcome to the Report Management System")
